@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-2.13.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<!-- Defining rsClient for PropertyService Interface -->
+	<!-- Defining matching JAXRS interface for API endpoint -->
+
+	<!-- This is added as part of reservation endpoints -->
+
+	<cxf:rsClient id="reservationRoomsSearchRSClient"
+		address="${service.reservation.rest.endpoint}${service.reservation.rooms.search.v1.uri}"
+		serviceClass="com.marriott.dsap.reservation.v1.services.RoomsService"
+		loggingFeatureEnabled="true" skipFaultLogging="false" inheritHeaders="true">
+
+		<cxf:outInterceptors>
+			<bean
+				class="com.marriott.dsap.common.http.MarriottHttpInterceptor">
+				<property name="mutualAuth"
+					value="${service.reservation.rest.endpoint.mutualauth}" />
+				<property name="endpointTimeoutName" value="service.reservationRoomSearch.rest.%s" />
+				<property name="disableDynamicConduit" value="true" />
+			</bean>
+		</cxf:outInterceptors>
+		<cxf:providers>
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+		</cxf:providers>
+	</cxf:rsClient>
+
+
+
+
+</beans>
